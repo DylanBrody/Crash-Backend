@@ -12,8 +12,6 @@ class SocketServer {
 
     private _io: SocketServerT;
     private _sockets: SocketT [] = [];
-    // private _io: socketIo.Server;
-    // private _sockets: socketIo.Socket [] = [];
     private _users: { [key: string]: UserType } = {};
     private _history: historyType[] = [];
     private _startTime: number;
