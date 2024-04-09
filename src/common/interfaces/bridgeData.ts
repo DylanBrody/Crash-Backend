@@ -43,6 +43,6 @@ export interface historyType {
 export interface gameStateType {
     currentNum: number
     currentSecondNum: number
-    gameState: string
+    GameState: string
     time: number
 }
