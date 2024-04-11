@@ -1,9 +1,9 @@
 import * as express from 'express';
-import * as bodyParser from "body-parser";
+import * as bodyParser from 'body-parser';
 import * as socketIo from 'socket.io';
-import config from "../common/config";
+import config from '../common/config';
 import cors = require('cors');
-import errorHandler from "../responses/ErrorHandler";
+import errorHandler from '../responses/ErrorHandler';
 import routes from '../api/routes';
 import routeNotFound from '../api/middlewares/RouteNotFound';
 

@@ -3,12 +3,11 @@ import { prcTimeout } from 'precision-timeout-interval';
 import * as isaac from 'isaac';
 import { getTime } from '../utils/math';
 import { addHistory } from '../api/models';
-import { BettingConfig, GameState, GameTime, SALT } from '../common/constants';
+import { BettingConfig, GameState, GameTime, SALT, initGameStateGlobalVariables } from '../common/constants';
 import { settle } from '../api/controllers/client';
 import { UserType, historyType, preHandType, gameStateType } from '../common/interfaces/bridgeData';
 import { generateRoundID, getRealRTP } from '../utils/helpe';
-import { global } from '../common/GameStateGlobalVariables';
-
+import { global } from '../common/gameStateGlobalVariables';
 
 class GameStateManager {
 
@@ -45,6 +44,7 @@ class GameStateManager {
             case GameState.GAMEEND:
                 if (Date.now() - this._startTime > GameTime.GAMEENDTIME) {
                     this.transitionToBetState();
+                    initGameStateGlobalVariables;
                 }
                 break;
         }

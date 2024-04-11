@@ -8,7 +8,7 @@ if (config.isEnvFound.error) {
 }
 let num = 0;
 
-const makeTestUser = async () => {
+export const makeTestUser = async () => {
     const user = await DUsers.findOne({ "userId": "1" });
     if (!user) {
         await addUser("test-user", "1", "", "INR")
@@ -86,9 +86,7 @@ export const getUserInfo = async (token: string) => {
 
 export const bet = async (betAmount: number, token: string) => {
     try {
-        // const orderNo = Date.now() + Math.floor(Math.random() * 1000);
         let orderNo = generateOrderNo();
-        // console.log(orderNo)
         const resData = await axios.post(config.betUrl, {
             gameCode: 'Crash',
             orderNo,
@@ -97,6 +95,7 @@ export const bet = async (betAmount: number, token: string) => {
             token
         })
         const _data = resData.data.data;
+
         if (!resData.data.success) {
             return {
                 status: false,

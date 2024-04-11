@@ -63,4 +63,28 @@ export const DEFAULT_USER = {
     }
 }
 
+export const initGameStateGlobalVariables = {
+	//base
+    _roundId: 0,
+    _countNo: 0,
+    _realRTP: -1,
+    _totalBetAmount: 0,
+    //common
+    _sockets: [],
+    _history: [],
+    _users: {},
+    _cashoutAmount: 0,
+    _currentNum: 0,
+    _currentSecondNum: 0,
+    _gameState: GameState.BET,
+    _target: -1,
+}
+
 export const SALT = process.env.SALT || '8788abc782ab7f51c089190af7c89e5a795ca48b904129ad62f0a2';
+
+export enum VerifyTokenStatus {
+    TOKEN_EXPIRED = 'TOKEN_EXPIRED',
+    ACCESS_TOKEN_NOTFOUND = 'ACCESS_TOKEN_NOTFOUND',
+    SIGNATURE_VERIFICATION_FAILURE = 'SIGNATURE_VERIFICATION_FAILURE',
+    SUCCESS = 'SUCCESS'
+}; 

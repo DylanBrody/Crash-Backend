@@ -1,4 +1,4 @@
-import { global } from '../common/GameStateGlobalVariables'
+import { global } from '../common/gameStateGlobalVariables'
 import { GameState } from '../common/constants';
 
 export const getPaginationMeta = (page: number, count: number, limit: number) => {
@@ -26,19 +26,3 @@ export const getRealRTP = () => {
 	else return Math.round(global._cashoutAmount / global._totalBetAmount * 10000) / 100;
 }
 
-export const initGameStateGlobalVariables = {
-	//base
-    _roundId: 0,
-    _countNo: 0,
-    _realRTP: -1,
-    _totalBetAmount: 0,
-    //common
-    _sockets: [],
-    _history: [],
-    _users: {},
-    _cashoutAmount: 0,
-    _currentNum: 0,
-    _currentSecondNum: 0,
-    _gameState: GameState.BET,
-    _target: -1,
-}

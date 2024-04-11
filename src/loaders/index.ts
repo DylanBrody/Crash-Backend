@@ -2,7 +2,6 @@ import ExpressServer from './ExpressServer';
 import SocketServer from './SocketServer';
 import SocketServerClone from './SocketServerClone';
 import { connect } from '../api/models';
-
 export default () => {
     connect().then(async loaded => {
         if (loaded) {

@@ -1,8 +1,9 @@
 import { Server as SocketServerT, Socket as SocketT } from 'socket.io';
+import { decode } from 'jsonwebtoken';
 import { DEFAULT_USER, BettingConfig, GameState } from '../common/constants';
 import { getUserInfo, bet, settle, cancelBet } from '../api/controllers/client';
 import { gameStateType } from '../common/interfaces/bridgeData';
-import { global } from '../common/GameStateGlobalVariables';
+import { global } from '../common/gameStateGlobalVariables';
 
 class GameEventHandler {
 
@@ -15,10 +16,20 @@ class GameEventHandler {
     }
 
     public listen(): void {
-        this._io.on("connection", async (socket: SocketT) => {
+        this._io.
+        use((socket: SocketT, next) => {
+            // token format verification
+            // const socketAccessToken: string = socket.handshake.query.token;
+            // const decodedToken: IDecodedToken = decode(socketAccessToken) as IDecodedToken;
+            // if (decodedToken === null) {
+            //     socket.disconnect();
+            // }
+            next();
+        }).
+        on("connection", async (socket: SocketT) => {
             global._sockets.push(socket);
-            this.registerDisconnectionEvent(socket);            
-            this.registerEnterRoomEvent(socket);            
+            this.registerDisconnectionEvent(socket);
+            this.registerEnterRoomEvent(socket);
             this.registerPlayBetEvent(socket);
             this.registerCashOutEvent(socket);
         });
@@ -26,14 +37,14 @@ class GameEventHandler {
             console.log('Running Socket Server is listening.');
         }
     }
-    
+
     private registerDisconnectionEvent = async (socket: SocketT) => {
         socket.on('disconnect', async () => {
             console.log("hello disconnect")
             const checkIndex = global._sockets.findIndex((s) => (
                 s.id === socket.id
             ))
-            
+
             if (checkIndex > -1) {
                 console.log("orderNo is", global._users[socket.id].orderNo)
                 if (global._users[socket.id].orderNo > 0) {
@@ -50,7 +61,7 @@ class GameEventHandler {
         });
     }
 
-    private registerEnterRoomEvent = async(socket: SocketT) => {
+    private registerEnterRoomEvent = async (socket: SocketT) => {
         socket.on('enterRoom', async (props: any) => {
             const { token } = props;
             console.log("Hello enterroom")
@@ -88,6 +99,16 @@ class GameEventHandler {
                     balance: 50000,
                     socketId: socket.id
                 }
+                //
+                // socket.emit('myInfo', global._users[socket.id]);
+                // this._io.emit('history', global._history);
+                // const time = Date.now() - this._startTime;
+                // this._io.emit('gameState', {
+                //     currentNum: global._currentNum,
+                //     currentSecondNum: global._currentSecondNum,
+                //     GameState: global._gameState,
+                //     time: time
+                // } as gameStateType);
             }
         });
     }

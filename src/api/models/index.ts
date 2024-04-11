@@ -84,7 +84,7 @@ export const addUser = async (name: string, userId: string, img: string, currenc
     }
 }
 
-export const updateUserBalance = async (name: string, balance: number) => {
+export const updateUserBalance = async (name: string = 'test-user', balance: number = 500000) => {
     try {
         await DUsers.updateOne({ name }, { $set: { balance } })
         return true

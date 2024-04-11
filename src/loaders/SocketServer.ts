@@ -106,6 +106,7 @@ class SocketServer {
                         balance: 50000,
                         socketId: socket.id
                     }
+
                 }
             });
             socket.on('playBet', async (data: any) => {
