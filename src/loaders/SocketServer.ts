@@ -73,46 +73,40 @@ class SocketServer {
                 const { token } = props;
                 console.log("Hello enterroom")
                 socket.emit('getBetLimits', { max: BettingConfig.BETTING_MAX, min: BettingConfig.BETTING_MIN });
-                this._users[socket.id] = {
-                    ...DEFAULT_USER,
-                    balance: 50000,
-                    socketId: socket.id
+                if (token !== null && token !== undefined) {
+                    let tokenSplit = token.split('&');
+                    const userInfo = await getUserInfo(tokenSplit[0]);
+                    if (userInfo.status) {
+                        this._users[socket.id] = {
+                            ...DEFAULT_USER,
+                            userId: userInfo.data.userId,
+                            userName: userInfo.data.userName,
+                            balance: userInfo.data.balance,
+                            // insert currency
+                            currency: userInfo.data.currency,
+                            avatar: userInfo.data.avatar,
+                            token: tokenSplit[0],
+                            socketId: socket.id
+                        }
+                        socket.emit('myInfo', this._users[socket.id]);
+                        this._io.emit('history', this._history);
+                        const time = Date.now() - this._startTime;
+                        this._io.emit('gameState', {
+                            currentNum: this._currentNum,
+                            currentSecondNum: this._currentSecondNum,
+                            GameState: this._gameState,
+                            time: time
+                        } as gameStateType);
+                    } else {
+                        socket.emit("deny", { message: "Unregistered User" });
+                    }
+                } else {
+                    this._users[socket.id] = {
+                        ...DEFAULT_USER,
+                        balance: 50000,
+                        socketId: socket.id
+                    }
                 }
-                // if (token !== null && token !== undefined) {
-                //     let tokenSplit = token.split('&');
-                //     const userInfo = await getUserInfo(tokenSplit[0]);
-                //     if (userInfo.status) {
-                //         this._users[socket.id] = {
-                //             ...DEFAULT_USER,
-                //             userId: userInfo.data.userId,
-                //             userName: userInfo.data.userName,
-                //             balance: userInfo.data.balance,
-                //             // insert currency
-                //             currency: userInfo.data.currency,
-                //             avatar: userInfo.data.avatar,
-                //             token: tokenSplit[0],
-                //             socketId: socket.id
-                //         }
-                //         socket.emit('myInfo', this._users[socket.id]);
-                //         this._io.emit('history', this._history);
-                //         const time = Date.now() - this._startTime;
-                //         this._io.emit('gameState', {
-                //             currentNum: this._currentNum,
-                //             currentSecondNum: this._currentSecondNum,
-                //             GameState: this._gameState,
-                //             time: time
-                //         } as gameStateType);
-                //     } else {
-                //         socket.emit("deny", { message: "Unregistered User" });
-                //     }
-                // } else {
-                //     this._users[socket.id] = {
-                //         ...DEFAULT_USER,
-                //         balance: 50000,
-                //         socketId: socket.id
-                //     }
-                //     console.log(this._users[socket.id])
-                // }
             });
             socket.on('playBet', async (data: any) => {
                 console.log("playbet")
